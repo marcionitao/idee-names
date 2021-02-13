@@ -1,24 +1,11 @@
-# idee-names
+# idee-names ✨
 
-## Project setup
-```
-npm install
-```
+Idee Names is a simple and effective name generator. It will help you build names for your business, jobs or day-to-day tasks.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Technologies
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Node
+- Vue
+- GraphQL
+- Bootstrap
+- Font Awesome
