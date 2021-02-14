@@ -11,7 +11,7 @@
         <div class="row">
           <!-- 1ª columm -->
           <div class="col-md">
-            <h5>Prefix <span class="badge badge-info">{{ prefixes.lenght }}</span></h5>
+            <h5>Prefix <span class="badge badge-info">{{ prefixes.length }}</span></h5>
             <div class="card">
               <div class="card-body">
                 <!--List Prefix-->
@@ -21,7 +21,14 @@
                   </li>
                 </ul>
                 <br>
-                <input class="form-control" type="text" placeholder="Add Prefix">
+                <!--input form to Prefix-->
+                <div class="input-group">
+                  <input class="form-control" type="text" placeholder="Add Prefix">
+                  <div class="input-group-append">
+                    <button class="btn btn-info" @click="addPrefix()"><span class="fa fa-plus"></span></button>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -37,7 +44,14 @@
                   </li>
                 </ul>
                 <br>
-                <input class="form-control" type="text" placeholder="Add Sufix">
+                <!--input form to Prefix-->
+                <div class="input-group">
+                  <input class="form-control" type="text" placeholder="Add Sufix">
+                  <div class="input-group-append">
+                    <button class="btn btn-info" @click="addSufix()"><span class="fa fa-plus"></span></button>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -62,21 +76,28 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
-  import "bootstrap/dist/css/bootstrap.css"
-  import "font-awesome/css/font-awesome.css"
+import Vue from 'vue';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'font-awesome/css/font-awesome.css';
 
-  export default Vue.extend({
-    name: 'app',
-    data() {
-      return {
-        prefixes: ['Air', 'Jet', 'Flight'],
-        sufixes: ['Hub', 'Station', 'Mart'],
-        domains: ['AirHub', 'AirStation', 'AirMart', 'JetHub', 'JetStation', 'JetMart', 'FlightHub', 'FlightStation', 'FlightMart']
-      }
+export default Vue.extend({
+  name: 'app',
+  data() {
+    return {
+      prefixes: ['Air', 'Jet', 'Flight'],
+      sufixes: ['Hub', 'Station', 'Mart'],
+      domains: ['AirHub', 'AirStation', 'AirMart', 'JetHub', 'JetStation', 'JetMart', 'FlightHub', 'FlightStation', 'FlightMart'],
+    };
+  },
+  methods: {
+    addPrefix(prefix: string) {
+      this.prefixes.push(prefix);
     },
-  });
-
+    addSufix(sufix: string) {
+      this.prefixes.push(sufix);
+    },
+  },
+});
 </script>
 
 <style scoped>
@@ -84,7 +105,7 @@
     margin: 30px 0 30px 0;
   }
   #main {
-    background-color: #be7d7d;
+    background-color: #f1f1f1;
     padding: 30px 0 30px 0;
   }
 </style>

@@ -17,10 +17,16 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.12.16",
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-plugin-typescript": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
-    "typescript": "^3.4.3",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.20.0",
+    "eslint-plugin-vue": "^7.5.0",
+    "typescript": "^3.9.9",
     "vue-template-compiler": "^2.6.10"
   },
   "postcss": {
