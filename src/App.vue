@@ -17,15 +17,23 @@
                 <!--List Prefix-->
                 <ul class="list-group">
                   <li class="list-group-item" v-for="prefix in prefixes" v-bind:key="prefix">
-                    {{ prefix }}
+                     <!--Define prefix title and delete icon-->
+                    <div class="row">
+                      <div class="col-md">
+                        {{ prefix }}
+                      </div>
+                      <div class="col-md text-right">
+                        <button class="btn btn-info" v-on:click="deletePrefix(prefix)"><span class="fa fa-trash"></span></button>
+                      </div>
+                    </div>
                   </li>
                 </ul>
                 <br>
                 <!--input form to Prefix-->
                 <div class="input-group">
-                  <input class="form-control" type="text" placeholder="Add Prefix">
+                  <input class="form-control" v-model="prefix" v-on:keyup.enter="addPrefix(prefix)" type="text" placeholder="Add Prefix">
                   <div class="input-group-append">
-                    <button class="btn btn-info" @click="addPrefix()"><span class="fa fa-plus"></span></button>
+                    <button class="btn btn-info" @click="addPrefix(prefix)"><span class="fa fa-plus"></span></button>
                   </div>
                 </div>
 
@@ -40,15 +48,23 @@
                 <!--List Sufix-->
                 <ul class="list-group">
                   <li class="list-group-item" v-for="sufix in sufixes" v-bind:key="sufix">
-                    {{ sufix }}
+                    <!--Define sufix Title and delete icon-->
+                    <div class="row">
+                      <div class="col-md">
+                        {{ sufix }}
+                      </div>
+                      <div class="col-md text-right">
+                        <button class="btn btn-info" v-on:click="deleteSufix(sufix)"><span class="fa fa-trash"></span></button>
+                      </div>
+                    </div>
                   </li>
                 </ul>
                 <br>
                 <!--input form to Prefix-->
                 <div class="input-group">
-                  <input class="form-control" type="text" placeholder="Add Sufix">
+                  <input class="form-control" v-model="sufix" v-on:keyup.enter="addSufix(sufix)" type="text" placeholder="Add Sufix">
                   <div class="input-group-append">
-                    <button class="btn btn-info" @click="addSufix()"><span class="fa fa-plus"></span></button>
+                    <button class="btn btn-info" @click="addSufix(sufix)"><span class="fa fa-plus"></span></button>
                   </div>
                 </div>
 
@@ -84,18 +100,40 @@ export default Vue.extend({
   name: 'app',
   data() {
     return {
+      prefix: '',
+      sufix: '',
       prefixes: ['Air', 'Jet', 'Flight'],
       sufixes: ['Hub', 'Station', 'Mart'],
       domains: ['AirHub', 'AirStation', 'AirMart', 'JetHub', 'JetStation', 'JetMart', 'FlightHub', 'FlightStation', 'FlightMart'],
     };
   },
   methods: {
-    addPrefix(prefix: string) {
+    addPrefix(prefix: any) {
       this.prefixes.push(prefix);
+      this.prefix = '';
+      this.generate();
     },
-    addSufix(sufix: string) {
-      this.prefixes.push(sufix);
+    deletePrefix(prefix: any) {
+      this.prefixes.splice(this.prefixes.indexOf(prefix),1);
+      this.generate();
     },
+    addSufix(sufix: any) {
+      this.sufixes.push(sufix);
+      this.sufix = '';
+      this.generate();
+    },
+    deleteSufix(sufix: any) {
+      this.sufixes.splice(this.sufixes.indexOf(sufix),1);
+      this.generate();
+    },
+    generate() {
+      this.domains = [];
+      for (const prefix of this.prefixes) {
+        for (const sufix of this.sufixes) {
+          this.domains.push(prefix+sufix); 
+        }      
+      }
+    }
   },
 });
 </script>
