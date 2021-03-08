@@ -1,3 +1,4 @@
+<!--It runs within of DomainList-->
 <template>
   <div>
     
@@ -39,7 +40,8 @@
 
 <script lang="ts">
 
-export default{
+import Vue from 'vue';
+export default Vue.extend({
 
   name: 'AppItemList',
   //Props allow you to pass a value (state) from one component (parent) to another (child).
@@ -61,7 +63,7 @@ export default{
       this.$emit('deleteItem', item);
     }
   }
-};
+});
 </script>
 
 <style scoped>
