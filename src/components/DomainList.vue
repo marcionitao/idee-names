@@ -51,6 +51,7 @@ import Vue from 'vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.css';
 import AppItemList from './AppItemList.vue';
+import axios from 'axios';
 
 export default Vue.extend({
   name: 'app',
@@ -59,8 +60,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      prefixes: ['Air', 'Jet', 'Flight'],
-      sufixes: ['Hub', 'Station', 'Mart'],     
+      prefixes: [] as any,
+      sufixes: [] as any,     
     };
   },
   methods: {
@@ -69,13 +70,13 @@ export default Vue.extend({
       this.prefixes.push(prefix);
     },
     deletePrefix(prefix: any) {
-      this.prefixes.splice(this.prefixes.indexOf(prefix),1);
+      this.prefixes.splice(this.prefixes.indexOf(prefix as any),1);
     },
     addSufix(sufix: any) {
       this.sufixes.push(sufix);
     },
     deleteSufix(sufix: any) {
-      this.sufixes.splice(this.sufixes.indexOf(sufix),1);
+      this.sufixes.splice(this.sufixes.indexOf(sufix as any),1);
     },
     
   },
@@ -100,9 +101,36 @@ export default Vue.extend({
     }
   },
   // 'created' is run after of 'data()', 'methods()'... is ideal to get datas from backend or using APIs
-  // created() {
+  created() {
+    axios({
+      url: 'http://localhost:4000',
+      method: 'post',
+      data: {
+        query: `
+          {
+            prefixes: items (type: "prefix") {
+              id
+              type
+              description
+            }
+            sufixes: items (type: "sufix") {
+              description
+            }
+          }
+        `
+      }
+    }).then(response => {
+      const query =  response.data;
+      // eslint-disable-next-line no-console
+      console.log(query.data);
 
-// },
+      this.prefixes = query.data.prefixes.map((prefix: any) => prefix.description);
+      this.sufixes = query.data.sufixes.map((sufix: any) => sufix.description);
+    }).catch((error) => {
+      // eslint-disable-next-line no-console
+      console.log(error);
+    });
+  },
 });
 </script>
 
