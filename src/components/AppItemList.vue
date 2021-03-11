@@ -7,11 +7,11 @@
       <div class="card-body">
         <!--List Item-->
         <ul class="list-group">
-          <li class="list-group-item" v-for="item in items" v-bind:key="item">
+          <li class="list-group-item" v-for="item in items" v-bind:key="item.id">
               <!--Define Item title and delete icon-->
             <div class="row">
               <div class="col-md">
-                {{ item }}
+                {{ item.description }}
               </div>
               <div class="col-md text-right">
                 <button class="btn btn-info" v-on:click="deleteItem(item)">

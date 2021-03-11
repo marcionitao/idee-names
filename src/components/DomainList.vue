@@ -67,10 +67,53 @@ export default Vue.extend({
   methods: {
 
     addPrefix(prefix: any) {
-      this.prefixes.push(prefix);
+    // this.prefixes.push(prefix);
+      // comunicando com graphql
+      axios({
+        url: 'http://localhost:4000',
+        method: 'post',
+        data: {
+          query: `
+            mutation ($item: ItemInput) {
+              newPrefix: saveItem(item: $item) {
+                id
+                type
+                description
+              }
+            }
+          `,
+          variables: {
+            item: {
+              type: 'prefix',
+              description: prefix
+            }
+          }
+        }
+      }).then(response => {
+        //refreshing List
+        const query = response.data;
+        const newPrefix = query.data.newPrefix;
+        this.prefixes.push(newPrefix.description);
+      });
+
     },
     deletePrefix(prefix: any) {
-      this.prefixes.splice(this.prefixes.indexOf(prefix as any),1);
+      axios({
+        url: 'http://localhost:4000',
+        method: 'post',
+        data: {
+          query: `
+            mutation ($id: Int) {
+              deleted: deleteItem(id: $id)
+            }
+          `,
+          variables: {
+            id: prefix.id
+          }
+        }
+      }).then(() => {
+        this.getPrefixes();
+      });
     },
     addSufix(sufix: any) {
       this.sufixes.push(sufix);
@@ -78,6 +121,55 @@ export default Vue.extend({
     deleteSufix(sufix: any) {
       this.sufixes.splice(this.sufixes.indexOf(sufix as any),1);
     },
+    getPrefixes() {
+      axios({
+        url: 'http://localhost:4000',
+        method: 'post',
+        data: {
+          query: `
+            {
+              prefixes: items (type: "prefix") {
+                id
+                type
+                description
+              }
+            }
+          `
+        }
+      }).then(response => {
+        const query =  response.data;
+        // eslint-disable-next-line no-console
+        console.log(query.data);
+        this.prefixes = query.data.prefixes;
+
+      }).catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      });
+    },
+    getSufixes() {
+      axios({
+        url: 'http://localhost:4000',
+        method: 'post',
+        data: {
+          query: `
+            {
+              sufixes: items (type: "sufix") {
+                description
+              }
+            }
+          `
+        }
+      }).then(response => {
+        const query =  response.data;
+        // eslint-disable-next-line no-console
+        console.log(query.data);
+        this.sufixes = query.data.sufixes;
+      }).catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      });
+    }
     
   },
   // is ideal to use dynamic interaction and reactive datas, Example: as data input on the screen or updates
@@ -86,7 +178,7 @@ export default Vue.extend({
       const domains = [];
       for (const prefix of this.prefixes) {
         for (const sufix of this.sufixes) {
-          const name = (prefix + sufix);
+          const name = (prefix.description + sufix.description);
           // all letters of the same size
           const url = name.toLowerCase();
           const checkout = `https://checkout.hostgator.com.br/?a=add&sld=${url}&tld=.com.br`;
@@ -102,34 +194,8 @@ export default Vue.extend({
   },
   // 'created' is run after of 'data()', 'methods()'... is ideal to get datas from backend or using APIs
   created() {
-    axios({
-      url: 'http://localhost:4000',
-      method: 'post',
-      data: {
-        query: `
-          {
-            prefixes: items (type: "prefix") {
-              id
-              type
-              description
-            }
-            sufixes: items (type: "sufix") {
-              description
-            }
-          }
-        `
-      }
-    }).then(response => {
-      const query =  response.data;
-      // eslint-disable-next-line no-console
-      console.log(query.data);
-
-      this.prefixes = query.data.prefixes.map((prefix: any) => prefix.description);
-      this.sufixes = query.data.sufixes.map((sufix: any) => sufix.description);
-    }).catch((error) => {
-      // eslint-disable-next-line no-console
-      console.log(error);
-    });
+    this.getPrefixes();
+    this.getSufixes();
   },
 });
 </script>
